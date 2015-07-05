@@ -11,7 +11,11 @@
 	{% endif %}
 	<h2>{{ data.title }}</h2>
 	<p>{{ data.explanation }}</p>
-	<div id="navButtons"><a class="btn btn-primary btn-lg" href="#">Previous Day</a> <a class="btn btn-primary btn-lg" href="#">Next Day</a></div>
+	<div id="navButtons"><a class="btn btn-primary btn-lg" href="#">Previous Day</a> 
+	{% if data.is_today != True %}
+		<a class="btn btn-primary btn-lg" href="#">Next Day</a>
+	{% endif %}
+	</div>
 </section>
 {% endblock %}
 

@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, url_for, jsonify, redirect, abort
 
 from ..util.fetcher import fetch_photo
 from ..util.helpers import pic2data
+import time
 
 
 pictures_bp = Blueprint('pictures', __name__, url_prefix='/apod')
@@ -14,8 +15,10 @@ def redirect_to_current_day():
 
 @pictures_bp.route('/astropix.html')
 def pictures_index():
-	pic_data = fetch_photo()
+	split_date = time.strftime('%y,%m,%d').split(',')
+	pic_data = fetch_photo(split_date[0], split_date[1], split_date[2])
 	data = pic2data(pic_data)
+	data['is_today'] = True
 	return render_template('pictures/detail.html', data=data)
 
 
@@ -28,4 +31,3 @@ def picture_detail(picture_date):
 	pic_data = fetch_photo(split_date[0], split_date[1], split_date[2])
 	data = pic2data(pic_data)
 	return render_template('pictures/detail.html', data=data)
-
