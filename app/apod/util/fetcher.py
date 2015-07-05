@@ -1,4 +1,5 @@
 import requests
+import json
 
 def fetch_photo():
 	# api_key = app.config['NASA_API_KEY']
@@ -6,4 +7,6 @@ def fetch_photo():
 	url = 'https://api.nasa.gov/planetary/apod?concept_tags=True&api_key={}'.format(api_key)
 
 	res = requests.get(url)
-	return res.text
+	picture_dict = json.loads(res.text)
+	
+	return picture_dict

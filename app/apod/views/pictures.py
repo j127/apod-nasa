@@ -1,4 +1,3 @@
-import json
 from flask import Blueprint, render_template, url_for, jsonify
 # from ..models.posts import Picture, Video
 
@@ -9,7 +8,6 @@ pictures_bp = Blueprint('pictures', __name__, url_prefix='/apod')
 
 @pictures_bp.route('/')
 def index():
-	pic = fetch_photo()
-	pic_json = json.loads(pic)
+	pic_data = fetch_photo()
 
-	return jsonify(pic_json)
+	return jsonify(pic_data)
