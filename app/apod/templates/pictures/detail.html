@@ -4,9 +4,24 @@
 	<h1>{{ data.title }} <small>{{ data.picture_date }}</small></h1>
 	<p class="lead">Astronomy Picture Of The Day</p>
 	<p><a href="{{ url_for('.pictures_index') }}">Discover The Cosmos!</a> Each day a different image or photograph of our fascinating universe is featured, along with a brief explanation written by a professional astronomer.</p>
-	<img class="img-responsive" alt="{{ data.title }}" src="{{ data.img_url }}">
+	{% if data.media_type == 'video' %}
+		<iframe id="videoEmbed" type="text/html" frameborder="0" src="{{ data.media_url }}" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+	{% else %}
+		<img class="img-responsive" alt="{{ data.title }}" src="{{ data.media_url }}">	
+	{% endif %}
 	<h2>{{ data.title }}</h2>
 	<p>{{ data.explanation }}</p>
 	<div id="navButtons"><a class="btn btn-primary btn-lg" href="#">Previous Day</a> <a class="btn btn-primary btn-lg" href="#">Next Day</a></div>
 </section>
+{% endblock %}
+
+{% block footer_includes %}
+	{% if data.media_type == 'video' %}
+		<script src="//cdnjs.cloudflare.com/ajax/libs/fitvids/1.1.0/jquery.fitvids.min.js"></script>
+		<script>
+		$(document).ready(function () {
+			$("#videoEmbed").fitVids();
+		})
+	</script>
+	{% endif %}
 {% endblock %}

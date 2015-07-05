@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, url_for, jsonify, redirect, abort
 # from ..models.posts import Picture, Video
 
 from ..util.fetcher import fetch_photo
+from ..util.helpers import pic2data
 
 
 pictures_bp = Blueprint('pictures', __name__, url_prefix='/apod')
@@ -14,11 +15,9 @@ def redirect_to_current_day():
 @pictures_bp.route('/astropix.html')
 def pictures_index():
 	pic_data = fetch_photo()
-	data = {}
-	data['title'] = pic_data['title']
-	data['img_url'] = pic_data['url']
-	data['explanation'] = pic_data['explanation']
+	data = pic2data(pic_data)
 	return render_template('pictures/detail.html', data=data)
+
 
 @pictures_bp.route('/ap<int:picture_date>.html')
 def picture_detail(picture_date):
@@ -27,8 +26,6 @@ def picture_detail(picture_date):
 		return abort(404)
 	split_date = [date_str[i:i+2] for i in range(0, len(date_str), 2)]
 	pic_data = fetch_photo(split_date[0], split_date[1], split_date[2])
-	data = {}
-	data['title'] = pic_data['title']
-	data['img_url'] = pic_data['url']
-	data['explanation'] = pic_data['explanation']
+	data = pic2data(pic_data)
 	return render_template('pictures/detail.html', data=data)
+
