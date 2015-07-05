@@ -5,5 +5,6 @@ pages_bp = Blueprint('pages',__name__)
 
 @pages_bp.route('/')
 def index():
-	return 'hello world'
+	data = {'title': 'Welcome to APOD'}
+	return render_template('pages/index.html', data=data)
 
