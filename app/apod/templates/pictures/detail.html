@@ -1,5 +1,11 @@
 {% extends 'layouts/base.html' %}
 {% block content %}
-<h1>{{ data.title }}</h1>
-<img src="{{ data.img_url }}">
+<section class="container">
+	<h1>{{ data.title }}</h1>
+	<p class="lead">Astronomy Picture Of The Day</p>
+	<img class="img-responsive" alt="{{ data.title }}" src="{{ data.img_url }}">
+	<h2>{{ data.title }}</h2>
+	<p>{{ data.explanation }}</p>
+	<div id="navButtons"><a class="btn btn-primary btn-lg" href="#">Previous Day</a> <a class="btn btn-primary btn-lg" href="#">Next Day</a></div>
+</section>
 {% endblock %}

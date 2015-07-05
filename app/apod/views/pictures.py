@@ -12,4 +12,5 @@ def index():
 	data = {}
 	data['title'] = pic_data['title']
 	data['img_url'] = pic_data['url']
+	data['explanation'] = pic_data['explanation']
 	return render_template('pictures/detail.html', data=data)
