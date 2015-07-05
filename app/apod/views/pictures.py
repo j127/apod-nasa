@@ -12,7 +12,7 @@ def redirect_to_current_day():
 
 
 @pictures_bp.route('/astropix.html')
-def index():
+def pictures_index():
 	pic_data = fetch_photo()
 	data = {}
 	data['title'] = pic_data['title']
