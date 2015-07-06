@@ -4,18 +4,15 @@ import mongoengine as me
 
 # Based on: https://flask-mongoengine.readthedocs.org/en/latest/
 
-class Post(me.Document):
+class APIRecord(me.EmbeddedDocument)
 	title = me.StringField(required=True)
 	explanation = me.StringField()
-	url = me.StringField()
+	url = me.URLField()
 	media_type = me.StringField()
-	concepts = me.ListField()
-    picture_date = me.DateTimeField(required=True)
+	concepts = me.ListField(StringField())
+    requested_date = me.DateTimeField(required=True, default=datetime.datetime.now)
+
+class Picture(me.Document):
+    apod_date = me.DateTimeField()
+    api_record = me.StringField(EmbeddedDocumentField(APIRecord))
     published = me.BooleanField(required=True)
-
-    # TODO: make sure this is what we want. It's based on the MongoEngine docs.
-    # Doesn't seem to work
-    #@me.queryset_manager
-    #def live_posts(doc_cls, queryset):
-        #return queryset.filter(published=True)
-
