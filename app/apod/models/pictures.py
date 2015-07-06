@@ -9,13 +9,11 @@ class APIRecord(me.EmbeddedDocument):
     explanation = me.StringField()
     url = me.URLField()
     media_type = me.StringField()
-    concepts = me.ListField(StringField())
-
-
-requested_date = me.DateTimeField(required=True, default=datetime.datetime.now)
+    concepts = me.ListField(me.StringField())
+    requested_date = me.DateTimeField(default=datetime.datetime.now)
 
 
 class Picture(me.Document):
     apod_date = me.DateTimeField()
-    api_record = me.StringField(EmbeddedDocumentField(APIRecord))
+    api_record = me.ListField(me.EmbeddedDocumentField(APIRecord))
     published = me.BooleanField(required=True)

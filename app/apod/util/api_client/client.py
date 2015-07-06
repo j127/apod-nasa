@@ -3,7 +3,7 @@ import json
 from time import sleep
 import datetime
 import mongoengine as me
-from apod.models.pictures import Picture, APIRecord
+from ...models.pictures import Picture, APIRecord
 
 
 def fetch_photo(year, month, day):
@@ -28,13 +28,20 @@ def fetch_photo(year, month, day):
 def fetch_photos(dates, delay=4):
     photos_data = []
     for d in dates:
-        sleep(delay)
         year = d[0]
         month = d[1]
         day = d[2]
-        photos_data.append(fetch_photo(year, month, day))
+        current_photo = fetch_photo(year,month,day)
+        photos_data.append(current_photo)
+        save_picture(current_photo, urldate_to_date(d))
+        sleep(delay)
     print(photos_data)
 
+def urldate_to_date(date_list):
+    '''Takes a date in the format of ['yy', 'mm', 'dd'] and returns a python date object.'''
+    new_date = datetime.datetime(int(date_list[0]),int(date_list[1]),int(date_list[2]))
+    print(date_list,new_date)
+    return new_date
 
 def generate_dates(n):
     numdays = n
@@ -47,16 +54,18 @@ def generate_dates(n):
 
 
 def save_picture(pic, pic_date):
-    api_record = APIRecord(
+    print(pic, pic_date)
+    current_api_record = APIRecord(
         title=pic['title'],
         explanation=pic['explanation'],
         url=pic['url'],
         media_type=pic['media_type'],
-        concepts=pic['concepts'],
-        requested_date=datetime.datetime.now
+        concepts=pic['concepts']
+        # requested_date=datetime.datetime.now
     )
-    pic = Picture(apod_date=pic_date, published=True)
-
+    current_pic = Picture(apod_date=pic_date, published=True)
+    current_pic.api_record.append(current_api_record)
+    current_pic.save()
 
 if __name__ == '__main__':
     fetch_photos(generate_dates(5))
