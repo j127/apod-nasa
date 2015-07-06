@@ -22,7 +22,7 @@ def pictures_index():
 	return render_template('pictures/detail.html', data=data)
 
 
-@pictures_bp.route('/ap<int:picture_date>.html')
+@pictures_bp.route('/ap<picture_date>.html')
 def picture_detail(picture_date):
 	date_str = str(picture_date)
 	if len(date_str) != 6:
