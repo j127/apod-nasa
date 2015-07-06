@@ -1,4 +1,5 @@
 def pic2data(pic_data):
+    print(pic_data)
     data = {}
     data['title'] = pic_data['title']
     data['media_url'] = pic_data['url']

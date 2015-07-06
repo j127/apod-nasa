@@ -9,9 +9,9 @@ from ...models.pictures import Picture, APIRecord
 def fetch_photo(year, month, day):
     # api_key = app.config['NASA_API_KEY']
     if int(year) > 40:
-        year = '19' + year
+        year = '19' + str(year).zfill(2)
     else:
-        year = '20' + year
+        year = '20' + str(year).zfill(2)
 
     constructed_date = '{}-{}-{}'.format(year, month, day)
     api_key = 'ldWyF16dCc1uyXUTWpRAC2O3QGOzZRuINM7Mjo08'

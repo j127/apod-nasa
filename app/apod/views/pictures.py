@@ -4,6 +4,8 @@ from ..models.pictures import Picture
 from ..util.api_client.client import fetch_photo
 from ..util.helpers import pic2data
 import time
+import json
+import datetime
 
 
 pictures_bp = Blueprint('pictures', __name__, url_prefix='/apod')
@@ -38,7 +40,17 @@ def picture_detail2(picture_date):
     date_str = str(picture_date)
     if len(date_str) != 6:
         return abort(404)
-    split_date = [date_str[i:i + 2] for i in range(0, len(date_str), 2)]
-    pic_data = fetch_photo(split_date[0], split_date[1], split_date[2])
-    data = pic2data(pic_data)
+    split_date = [int(date_str[i:i + 2]) for i in range(0, len(date_str), 2)]
+    todays_date = datetime.datetime(split_date[0], split_date[1], split_date[2])
+    tomorrows_date = datetime.datetime(split_date[0], split_date[1], split_date[2]+1)
+    pic_from_db = Picture.objects(__raw__={'apod_date': {'$gte': todays_date, '$lt': tomorrows_date}})
+    if len(pic_from_db) < 1:
+        # If no results in database, use API.
+        pic_data = fetch_photo(split_date[0], split_date[1], split_date[2])
+        data = pic2data(pic_data)
+    else:
+        # Use database results.
+        current_pic = json.loads(pic_from_db[0].to_json())['api_record'][0]
+        data = pic2data(current_pic)
+    
     return render_template('pictures/detail.html', data=data)

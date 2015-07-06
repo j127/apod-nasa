@@ -5,7 +5,7 @@ import mongoengine as me
 # Based on: https://flask-mongoengine.readthedocs.org/en/latest/
 
 class APIRecord(me.EmbeddedDocument):
-    title = me.StringField(required=True)
+    title = me.StringField()
     explanation = me.StringField()
     url = me.URLField()
     media_type = me.StringField()
