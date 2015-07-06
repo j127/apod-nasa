@@ -2,6 +2,9 @@ import requests
 import json
 from time import sleep
 import datetime
+import mongoengine as me
+from apod.models.pictures import Picture, APIRecord
+
 
 def fetch_photo(year, month, day):
 	# api_key = app.config['NASA_API_KEY']
@@ -39,6 +42,17 @@ def generate_dates(n):
 		formatted_dates.append(d.strftime('%y-%m-%d').split('-'))
 	return formatted_dates
 
+def save_picture(pic, pic_date):
+	api_record = APIRecord(
+		title=pic['title'],
+		explanation=pic['explanation'],
+		url=pic['url'],
+		media_type=pic['media_type'],
+		concepts=pic['concepts'],
+		requested_date=datetime.datetime.now
+		)
+	pic = Picture(apod_date=pic_date, published=True)
+
+
 if __name__ == '__main__':
 	fetch_photos(generate_dates(5))
-	
