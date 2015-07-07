@@ -68,4 +68,4 @@ def save_picture(pic, pic_date):
     current_pic.save()
 
 if __name__ == '__main__':
-    fetch_photos(generate_dates(5))
+    fetch_photos(generate_dates(200),1)

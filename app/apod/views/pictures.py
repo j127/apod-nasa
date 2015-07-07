@@ -54,3 +54,17 @@ def picture_detail2(picture_date):
         data = pic2data(current_pic)
     
     return render_template('pictures/detail.html', data=data)
+
+@pictures_bp.route('/archivepix.html')
+def archive_home():
+    # pictures = Picture.objects() #.order_by('-apod_date')
+    # pre_json = pictures[0].to_json() #.to_json())['api_record'][0][0]
+    # json_to_dict = json.loads(pre_json)
+    # jsonify(pre_json)
+
+    q = Picture.objects()
+    j = q[0].to_json()
+    d = json.loads(j)
+    output = d['api_record'] #[0]['title']
+    jsonify(output)
+    # jsonify(json.loads(Pictures.objects()[0].to_json())['api_record'][0]['title'])
