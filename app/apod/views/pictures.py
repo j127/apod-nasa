@@ -57,14 +57,17 @@ def picture_detail2(picture_date):
 
 @pictures_bp.route('/archivepix.html')
 def archive_home():
-    # pictures = Picture.objects() #.order_by('-apod_date')
-    # pre_json = pictures[0].to_json() #.to_json())['api_record'][0][0]
-    # json_to_dict = json.loads(pre_json)
-    # jsonify(pre_json)
+    data_array = []
+    for picture in Picture.objects():
+        title = picture.api_record[0].title
 
-    q = Picture.objects()
-    j = q[0].to_json()
-    d = json.loads(j)
-    output = d['api_record'] #[0]['title']
-    jsonify(output)
-    # jsonify(json.loads(Pictures.objects()[0].to_json())['api_record'][0]['title'])
+        iso_date = picture.apod_date
+        url_date = iso_date.strftime('%y%m%d')
+        
+        url = '/apod/ap' + url_date + '.html'
+        
+        data_array.append({'title': title, 'url': url})
+
+    output = json.dumps(data_array, indent=4, sort_keys=True)
+
+    return output
