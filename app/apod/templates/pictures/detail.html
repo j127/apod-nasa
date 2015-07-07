@@ -18,11 +18,17 @@
 
     <p>{{ data.explanation }}</p>
 
-    <div id="navButtons"><a class="btn btn-primary btn-lg" href="#">Previous Day</a>
+    <div id="navButtons">
+        {% if data.is_beginning_date != True %}
+        <a class="btn btn-primary btn-lg" href="/apod/ap{{ data.previous_date }}.html">Previous Day</a>
+        {% endif %}
         {% if data.is_today != True %}
-        <a class="btn btn-primary btn-lg" href="#">Next Day</a>
+        <a class="btn btn-primary btn-lg" href="/apod/ap{{ data.next_date }}.html">Next Day</a>
         {% endif %}
     </div>
+    <p>{{ data.todays_date }}</p>
+    <p>{{ data.final_date }}</p>
+    <p>{{ data.last_date }}</p>
 </section>
 {% endblock %}
 

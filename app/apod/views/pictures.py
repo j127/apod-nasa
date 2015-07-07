@@ -24,25 +24,26 @@ def pictures_index():
     return render_template('pictures/detail.html', data=data)
 
 
-@pictures_bp.route('/ap<picture_date>.html')
-def picture_detail(picture_date):
-    date_str = str(picture_date)
-    if len(date_str) != 6:
-        return abort(404)
-    split_date = [date_str[i:i + 2] for i in range(0, len(date_str), 2)]
-    pic_data = fetch_photo(split_date[0], split_date[1], split_date[2])
-    data = pic2data(pic_data)
-    return render_template('pictures/detail.html', data=data)
-    return "<h1>" + str(picture_date) + "</h1>"
+# @pictures_bp.route('/ap<picture_date>.html')
+# def picture_detail(picture_date):
+#     date_str = str(picture_date)
+#     if len(date_str) != 6:
+#         return abort(404)
+#     split_date = [date_str[i:i + 2] for i in range(0, len(date_str), 2)]
+#     pic_data = fetch_photo(split_date[0], split_date[1], split_date[2])
+#     data = pic2data(pic_data)
+#     return render_template('pictures/detail.html', data=data)
+#     return "<h1>" + str(picture_date) + "</h1>"
 
-@pictures_bp.route('/2/ap<picture_date>.html')
+@pictures_bp.route('/ap<picture_date>.html')
 def picture_detail2(picture_date):
     date_str = str(picture_date)
     if len(date_str) != 6:
         return abort(404)
     split_date = [int(date_str[i:i + 2]) for i in range(0, len(date_str), 2)]
-    todays_date = datetime.datetime(split_date[0], split_date[1], split_date[2])
-    tomorrows_date = datetime.datetime(split_date[0], split_date[1], split_date[2]+1)
+    todays_date = datetime.datetime(int(add_year_prefix(split_date[0])), split_date[1], split_date[2])
+    tomorrows_date = todays_date + datetime.timedelta(days=1)
+    yesterdays_date = todays_date - datetime.timedelta(days=1)
     pic_from_db = Picture.objects(__raw__={'apod_date': {'$gte': todays_date, '$lt': tomorrows_date}})
     if len(pic_from_db) < 1:
         # If no results in database, use API.
@@ -52,7 +53,20 @@ def picture_detail2(picture_date):
         # Use database results.
         current_pic = json.loads(pic_from_db[0].to_json())['api_record'][0]
         data = pic2data(current_pic)
+    last_picture = Picture.objects().only('apod_date').order_by('-apod_date').first()
+    last_date = last_picture.apod_date
+    # print("Last Picture: "+ str(last_picture.apod_date))
+    if todays_date.date() == last_date.date():
+        data['is_today'] = True
+    elif todays_date.date() == datetime.datetime(1996,6,16).date():
+        data['is_beginning_date'] = True
     
+    data['todays_date'] = str(todays_date.date())
+    data['final_date'] = str(datetime.datetime(1996,6,16).date())
+    data['last_date'] = str(last_date)
+    
+    data['next_date'] = tomorrows_date.strftime('%y%m%d')
+    data['previous_date'] = yesterdays_date.strftime('%y%m%d')
     return render_template('pictures/detail.html', data=data)
 
 @pictures_bp.route('/archivepix.html')
