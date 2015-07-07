@@ -34,6 +34,7 @@ def picture_detail(picture_date):
     pic_data = fetch_photo(split_date[0], split_date[1], split_date[2])
     data = pic2data(pic_data)
     return render_template('pictures/detail.html', data=data)
+    return "<h1>" + str(picture_date) + "</h1>"
 
 @pictures_bp.route('/2/ap<picture_date>.html')
 def picture_detail2(picture_date):
