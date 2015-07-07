@@ -5,7 +5,7 @@
         <h1>{{ data.title }}</h1>
         <ul>
         {% for pic in data.pictures %}
-            <li>{{ pic.date_str }}<a href="{{ pic.url }}">{{ pic.title }}</a></li>
+            <li>{{ pic.date_str }}: <a href="{{ pic.url }}">{{ pic.title }}</a></li>
         {% endfor %}
         </ul>
     </section>

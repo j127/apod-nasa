@@ -2,11 +2,10 @@ from flask import Blueprint, render_template, url_for, jsonify, redirect, abort
 from ..models.pictures import Picture
 
 from ..util.api_client.client import fetch_photo
-from ..util.helpers import pic2data
+from ..util.helpers import pic2data, add_year_prefix
 import time
 import json
 import datetime
-
 
 pictures_bp = Blueprint('pictures', __name__, url_prefix='/apod')
 
@@ -63,10 +62,12 @@ def archive_home():
         title = picture.api_record[0].title
 
         iso_date = picture.apod_date
-        url_date = iso_date.strftime('%y%m%d')
-        date_str = iso_date.strftime('%Y %B %d')
+        year, month, day = iso_date.strftime('%y-%m-%d').split('-')
+        four_digit_year = add_year_prefix(year)
+        pre_date = datetime.datetime(int(year),int(month),int(day))
+        date_str = pre_date.strftime('%Y %B %d')
         
-        url = '/apod/ap' + url_date + '.html'
+        url = '/apod/ap{}{}{}.html'.format(year,month,day)
         
         data_array.append({'title': title, 'url': url, 'date_str': date_str})
 
