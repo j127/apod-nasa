@@ -64,11 +64,16 @@ def archive_home():
 
         iso_date = picture.apod_date
         url_date = iso_date.strftime('%y%m%d')
+        date_str = iso_date.strftime('%Y %B %d')
         
         url = '/apod/ap' + url_date + '.html'
         
-        data_array.append({'title': title, 'url': url})
+        data_array.append({'title': title, 'url': url, 'date_str': date_str})
 
     output = json.dumps(data_array, indent=4, sort_keys=True)
+    data = {}
+    data['pictures'] = data_array
 
-    return output
+    data['title'] = 'Astronomy Picture Of The Day Archive'
+
+    return render_template('pictures/archive.html', data=data)
