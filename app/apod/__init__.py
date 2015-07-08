@@ -4,8 +4,8 @@ from flask_debugtoolbar import DebugToolbarExtension
 # from .views.admin import AdminIndexView
 import mongoengine
 
-# Import
 def register_blueprints(app_instance):
+    """This function prevents circular imports."""
     from .views.pages import pages_bp
     from .views.pictures import pictures_bp
 
@@ -15,7 +15,7 @@ def register_blueprints(app_instance):
 
 app = Flask(__name__, instance_relative_config=True)
 
-# From default to overrideen
+# From default to overridden
 app.config.from_object('config.default')
 app.config.from_pyfile('config.py')
 app.debug = True

@@ -4,7 +4,7 @@ apod-nasa
 Setup
 -----
 
-Each computer should manually add an :code:`instance/config.py` file that contains these variables:
+Each computer should manually add an :code:`app/instance/config.py` file that contains these variables:
 
 .. code-block:: python
 
