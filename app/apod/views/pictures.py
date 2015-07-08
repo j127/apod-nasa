@@ -22,6 +22,13 @@ def pictures_index():
     pic_data = fetch_photo(split_date[0], split_date[1], split_date[2])
     data = pic2data(pic_data)
     data['is_today'] = True
+
+    # split_date = [int(date_str[i:i + 2]) for i in range(0, len(date_str), 2)]
+    todays_date = datetime.datetime(int(add_year_prefix(split_date[0])), int(split_date[1]), int(split_date[2]))
+    yesterdays_date = todays_date - datetime.timedelta(days=1)
+
+    data['previous_date'] = yesterdays_date.strftime('%y%m%d')
+
     return render_template('pictures/detail.html', data=data)
 
 # @pictures_bp.route('/ap<picture_date>.html')
