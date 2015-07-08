@@ -62,16 +62,21 @@ def picture_detail(picture_date):
 
     # Get the latest picture
     last_picture = Picture.objects().only('apod_date').order_by('-apod_date').first()
-    last_date = last_picture.apod_date
-    # print("Last Picture: "+ str(last_picture.apod_date))
-    if todays_date.date() == last_date.date():
+    last_date_raw = last_picture.apod_date
+    
+    two_digit_year = getattr(last_date_raw,'year')
+    four_digit_year = add_year_prefix(two_digit_year)
+    
+    last_date_day = getattr(last_date_raw, 'day')
+    last_date_month = getattr(last_date_raw, 'month')
+    last_date_year = int(four_digit_year)
+    last_date_complete = datetime.datetime(last_date_year, last_date_month, last_date_month)
+    
+    if todays_date.date() == last_date_complete.date():
         data['is_today'] = True
     elif todays_date.date() == datetime.datetime(1996,6,16).date():
         data['is_beginning_date'] = True
-    
-    data['todays_date'] = str(todays_date.date())
-    data['final_date'] = str(datetime.datetime(1996,6,16).date())
-    data['last_date'] = str(last_date)
+
     data['next_date'] = tomorrows_date.strftime('%y%m%d')
     data['previous_date'] = yesterdays_date.strftime('%y%m%d')
     return render_template('pictures/detail.html', data=data)
