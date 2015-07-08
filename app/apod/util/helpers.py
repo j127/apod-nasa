@@ -34,7 +34,7 @@ class VulcanDateSlicer(object):
         # TODO: fix this
         if type(input) == str:
             # Extracts the digits
-            self.date_str = re.match(r'(\d{2,4}-?\d{2}-?\d{2})', input)
+            self.date_str = re.match(r'(\d{2,4}-?\d{2}-?\d{2})', input).string
             if len(self.date_str) == 6:
                 # e.g., '151207'
                 # Add prefixes
@@ -44,11 +44,15 @@ class VulcanDateSlicer(object):
                 else:
                     # It's 21st Century
                     self.date_str = '20{}'.format(self.date_str)
-            self.current_date = date(self.date_str)
+            date_list = self.as_8_digit_list()
+            print(date_list)
+            self.year, self.month, self.day = date_list
+            self.current_date = date(int(self.year), int(self.month), int(self.day))
         else:
             # Make sure that it's date() not datetime()
             self.current_date = date(input)
             # self.date_str =
+
 
     def __repr__(self):
         return 'A date: {}'.format(self.date_str)
@@ -59,6 +63,11 @@ class VulcanDateSlicer(object):
         Only used internally in the class.
         """
         return [int(self.date_str[i:i + 2]) for i in range(0, len(self.date_str), 2)]
+
+    # def _convert_to_ymd(self, date_string):
+        # """Converts the self.date_str to a list."""
+        # year, month, day = self._chunk_it()
+        # return (year, month, day)
 
     def as_date(self):
         """Returns the input as a datetime.date()."""
@@ -89,8 +98,11 @@ class VulcanDateSlicer(object):
     def as_8_digit_list(self):
         """Returns the input like ['2015', '12, '01']."""
         chunks = self._chunk_it()
-        first_item = '{}{}'.format(chunks.pop(0), chunks.pop(1))
-        output = [first_item, chunks[1], chunks[2]]
+        print(chunks)
+        first_item = '{}{}'.format(chunks[0], chunks[1])
+        print(chunks)
+        print(first_item)
+        output = [first_item, chunks[2], chunks[3]]
         return output
 
 
